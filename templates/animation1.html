@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Split Layout */
+    .split {
+        height: 100%;
+        position: absolute;
+        width: 50%;
+        top: 0;
+        overflow-x: hidden;
+        padding: 20px;
+    }
+    .left { left: 0; background-color: #f4f4f4; }
+    .right { right: 0; background-color: #fff; }
+
+    /* Highlighted words */
+    .highlighted {
+        color: #09edc7;
+        font-size: xx-large;
+    }
+
+    /* General styling */
+    .submit, .mic {
+        padding: 10px 20px;
+        background-color: #09edc7;
+        border: none;
+        cursor: pointer;
+        color: white;
+        font-size: 16px;
+    }
+    .mic img { vertical-align: middle; }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .split {
+            width: 100%;
+            position: relative;
+        }
+        video {
+            width: 100%;
+            height: auto;
+        }
+    }
+</style>
+
+<div class="split left">
+    <h2 align="center">Enter Text or Use Mic</h2>
+    <br>
+    <form action="" method="post" onsubmit="return validateInput()" align="left">
+        {% csrf_token %}
+        <input type="text" name="sen" class="mytext" id="speechToText" placeholder="Enter text here">
+        <button type="button" class="mic" onclick="record()">
+            <img src="{% static 'mic3.png' %}" height="32px" width="38px" />
+        </button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" value="Submit" class="submit">
+    </form>
+    <br>
+    <table cellspacing="20px">
+        <tr>
+            <td>The text that you entered is:</td>
+            <td>{{ text }}</td>
+        </tr>
+        <tr>
+            <td>Key words in sentence:</td>
+            <td>
+                <ul id="wordList">
+                    {% for word in words %}
+                    <li>{{ word }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="split right">
+    <h2 align="center">Sign Language Animation</h2>
+    <div style="text-align:center">
+        <button class="submit" onclick="playPause()">Play/Pause</button>
+        <video id="videoPlayer" width="600" height="350" preload="auto" autoplay>
+            <source src="" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+</div>
+
+<script>
+    let isPlaying = false;
+
+    // Speech Recognition
+    function record() {
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = 'en-IN';
+
+        recognition.onresult = function(event) {
+            document.getElementById('speechToText').value = event.results[0][0].transcript;
+        };
+        recognition.onerror = function(event) {
+            alert("Error recognizing speech. Please try again.");
+        };
+        recognition.onnomatch = function() {
+            alert("No speech detected. Please speak clearly.");
+        };
+
+        recognition.start();
+    }
+
+    // Validate form input
+    function validateInput() {
+        const input = document.getElementById('speechToText').value.trim();
+        if (!input) {
+            alert("Please enter some text or use the mic.");
+            return false;
+        }
+        return true;
+    }
+
+    // Play animations dynamically
+    function play() {
+        const videoSource = [];
+        const words = document.getElementById("wordList").getElementsByTagName("li");
+
+        // Build dynamic video sources
+        for (let i = 0; i < words.length; i++) {
+             videoSource[j] = "/static/" + videos[j].innerHTML + ".mp4";
+        }
+
+        let currentIndex = 0;
+
+        // Play the current video
+        function playVideo(index) {
+            const videoPlayer = document.getElementById("videoPlayer");
+            const wordItems = document.getElementById("wordList").getElementsByTagName("li");
+
+            // Highlight current word
+            Array.from(wordItems).forEach(item => item.classList.remove("highlighted"));
+            wordItems[index].classList.add("highlighted");
+
+            // Set video source and play
+            videoPlayer.setAttribute("src", videoSource[index]);
+            videoPlayer.load();
+            videoPlayer.play();
+        }
+
+        playVideo(currentIndex);
+
+        // Move to the next video after the current one ends
+        document.getElementById("videoPlayer").addEventListener("ended", function() {
+            const wordItems = document.getElementById("wordList").getElementsByTagName("li");
+
+            wordItems[currentIndex].classList.remove("highlighted");
+            currentIndex++;
+
+            if (currentIndex < videoSource.length) {
+                playVideo(currentIndex);
+            } else {
+                isPlaying = false;
+            }
+        });
+    }
+
+    // Play/Pause Button Logic
+    function playPause() {
+        const videoPlayer = document.getElementById("videoPlayer");
+
+        if (!isPlaying) {
+            play();
+            isPlaying = true;
+        } else {
+            videoPlayer.pause();
+            isPlaying = false;
+        }
+    }
+</script>
+{% endblock %}

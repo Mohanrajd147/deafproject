@@ -1,0 +1,106 @@
+<html>
+<head>
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+#nav {
+  list-style-type: none;
+  margin-top: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #2C3E50; /* Deep Blue */
+}
+h2 {
+  color: #F1C40F; /* Gold */
+}
+.li {
+  float: left;
+}
+.li a {
+  display: block;
+  color: #ECF0F1; /* Light Gray */
+  font-size: 20px;
+  font-weight: bold;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #F1C40F;
+  color: #2C3E50;
+  font-weight: bold;
+}
+
+.form-style button {
+  width: 89%;
+  height: 70%;
+  padding: 5%;
+  background: #F1C40F;
+  border-bottom: 2px solid #2C3E50;
+  border-top-style: none;
+  border-right-style: none;
+  border-left-style: none;
+  color: #2C3E50;
+  font-weight: bold;
+  font-size: 28px;
+  font-family: "Times New Roman";
+}
+
+.form-style button:hover {
+  background-color: #2C3E50;
+  color: #F1C40F;
+}
+
+body {
+  background-color: #ECF0F1;
+}
+
+.form-style {
+  font: 95% Arial, Helvetica, sans-serif;
+  max-width: 400px;
+  margin: 10px auto;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.form-style h1, .form-style a {
+  padding: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "Times New Roman";
+  text-align: center;
+  color: #2C3E50;
+}
+.site-form span, label {
+  color: #2C3E50;
+}
+.errorlist {
+  color: red;
+  font-weight: bold;
+}
+</style>
+<title>Homepage</title>
+</head>
+<div style="background-color:#2C3E50;color:#F1C40F;padding:10px;border: 1px solid #F1C40F;margin-bottom:0;">
+<h1 align=center>Audio To Sign Language Tool</h1>
+</div>
+<br>
+<body>
+<ul id="nav">
+  <li class="li"><a class="active" href="/Home">Home</a></li>
+  <li class="li"><a href="/Convertor">Convertor</a></li>
+  <li class="li"><a href="/Contact">Contact</a></li>
+  <li class="li"><a href="/About">About</a></li>
+</ul>
+
+<div class="wrapper">
+  {% block content %}
+  {% endblock %}
+</div>
+</body>
+</html>

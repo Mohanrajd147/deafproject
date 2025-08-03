@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+ <form action="{{ url_for('animation_view') }}" method="post" align="left">
+                    <input type="text" name="sen" class="mytext" id="speechToText" placeholder="">
+                    <button type="button" name="button" class="mic" onclick="record()">
+                        <img src="{{ url_for('static', filename='assets/mic3.png') }}" height="32px" width="38px" />
+                    </button>
+                    <input type="submit" value="Submit" class="submit">
+                </form>
+</body>
+
+<!-- //footer -->
+<script>
+    function record() {
+        var recognition = new webkitSpeechRecognition();
+        recognition.lang = 'en-IN';
+
+        recognition.onresult = function(event) {
+            console.log(event);
+            document.getElementById('speechToText').value = event.results[0][0].transcript;
+        }
+        recognition.start();
+    }
+
+</script>
+
+</html>
